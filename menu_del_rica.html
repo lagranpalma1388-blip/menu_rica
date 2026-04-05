@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taquería Del Rica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --rojo:     #C0392B;
+      --rojo-d:   #96281B;
+      --verde:    #1E6B3A;
+      --verde-l:  #27AE60;
+      --crema:    #FDF6E3;
+      --dorado:   #D4A017;
+      --carbon:   #1A1A1A;
+      --gris:     #4A4A4A;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--crema);
+      color: var(--carbon);
+      font-family: 'Libre Baskerville', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(192,57,43,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(30,107,58,0.07) 0%, transparent 50%);
+    }
+    header {
+      position: relative;
+      text-align: center;
+      padding: 56px 24px 40px;
+      background: linear-gradient(160deg, var(--rojo-d) 0%, var(--rojo) 55%, #E74C3C 100%);
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(45deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 12px);
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 40px;
+      background: var(--crema);
+      clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .logo-band { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px; }
+    .logo-icon { font-size: 2.4rem; line-height: 1; }
+    .brand-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      color: #fff;
+      letter-spacing: 4px;
+      line-height: 1;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
+    }
+    .brand-sub { font-family: 'Libre Baskerville',serif; font-size: 0.85rem; color: rgba(255,255,255,0.75); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; }
+    .tagline { display: inline-block; background: var(--dorado); color: #fff; font-family: 'Bebas Neue',sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 6px 24px; border-radius: 2px; }
+
+    /* ── WIFI BUTTON ── */
+    .wifi-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 9px 22px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.35);
+      border-radius: 30px;
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+      backdrop-filter: blur(4px);
+    }
+    .wifi-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.6); transform: translateY(-2px); }
+    .wifi-btn svg { flex-shrink: 0; }
+
+    /* ── WIFI MODAL ── */
+    .wifi-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    .wifi-overlay.open { display: flex; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+    .wifi-modal {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px 32px 28px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+      animation: slideUp .25s ease;
+      position: relative;
+    }
+    @keyframes slideUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+
+    .wifi-modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      color: #bbb; font-size: 1.4rem; line-height: 1;
+      transition: color .15s;
+    }
+    .wifi-modal-close:hover { color: var(--rojo); }
+
+    .wifi-modal-icon {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--verde), #27AE60);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 6px 20px rgba(30,107,58,0.3);
+    }
+    .wifi-modal h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 4px;
+      color: var(--carbon);
+      margin-bottom: 4px;
+    }
+    .wifi-modal .wifi-sub {
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .wifi-field {
+      background: #F8F5EE;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      text-align: left;
+      position: relative;
+    }
+    .wifi-field label {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #aaa;
+      margin-bottom: 4px;
+      font-family: 'Libre Baskerville', serif;
+    }
+    .wifi-field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .wifi-field span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      color: var(--carbon);
+    }
+    .copy-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--verde); padding: 4px;
+      border-radius: 6px;
+      transition: background .15s, color .15s;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover { background: #E8F5E9; }
+    .copy-btn.copied { color: var(--dorado); }
+
+    .wifi-note {
+      font-size: 0.72rem;
+      color: #bbb;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin: 44px 0 20px; }
+    .section-header::before, .section-header::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.2; }
+    .section-header h2 { font-family: 'Bebas Neue',sans-serif; font-size: 1.6rem; letter-spacing: 5px; white-space: nowrap; padding: 4px 16px; border-radius: 2px; }
+    .sec-red  { color: var(--rojo);  } .sec-red  h2 { color: #fff; background: var(--rojo); }
+    .sec-green{ color: var(--verde); } .sec-green h2{ color: #fff; background: var(--verde); }
+    .sec-gold { color: var(--dorado);} .sec-gold h2 { color: #fff; background: var(--dorado); }
+    .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .item-card {
+      background: #fff; border: 1px solid rgba(0,0,0,0.07); border-radius: 10px;
+      padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;
+      gap: 8px; transition: transform .18s ease, box-shadow .18s ease; cursor: default;
+    }
+    .item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.09); }
+    .item-name { font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gris); }
+    .item-price { font-family: 'Bebas Neue',sans-serif; font-size: 1.35rem; letter-spacing: 1px; white-space: nowrap; color: var(--rojo); }
+    .item-card.green .item-price { color: var(--verde); }
+    /* ── ORDENES ── */
+    .ordenes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .ordenes-grid { grid-template-columns: 1fr; } }
+
+    .orden-card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
+    }
+    .orden-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+    }
+
+    /* colored top stripe */
+    .orden-card .oc-stripe {
+      height: 6px;
+      width: 100%;
+    }
+    .orden-card.chica .oc-stripe  { background: linear-gradient(90deg, var(--rojo), #E74C3C); }
+    .orden-card.grande .oc-stripe { background: linear-gradient(90deg, var(--verde), #27AE60); }
+
+    .orden-card .oc-body {
+      padding: 18px 20px 20px;
+      position: relative;
+    }
+
+    /* decorative bg icon */
+    .orden-card .oc-bg-icon {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      opacity: 0.06;
+      width: 56px;
+      height: 56px;
+    }
+
+    /* size badge */
+    .oc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      padding: 3px 10px;
+      border-radius: 30px;
+      margin-bottom: 10px;
+    }
+    .orden-card.chica  .oc-badge { background: #FFEBEE; color: var(--rojo); }
+    .orden-card.grande .oc-badge { background: #E8F5E9; color: var(--verde); }
+    .oc-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .orden-card.chica  .oc-badge-dot { background: var(--rojo); }
+    .orden-card.grande .oc-badge-dot { background: var(--verde); }
+
+    /* name */
+    .orden-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 2.5px;
+      color: var(--carbon);
+      margin-bottom: 5px;
+      line-height: 1.2;
+    }
+
+    /* desc chips */
+    .orden-desc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 14px;
+      min-height: 22px;
+    }
+    .desc-chip {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 2px 8px;
+      background: #F5F5F5;
+      border-radius: 4px;
+      color: #888;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    /* bottom row */
+    .oc-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .orden-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .orden-card.chica  .orden-price { color: var(--rojo); }
+    .orden-card.grande .orden-price { color: var(--verde); }
+
+    /* weight pill */
+    .oc-weight {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      padding-bottom: 4px;
+    }
+    .oc-weight svg { opacity: 0.5; }
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
+    .badge { padding: 10px 20px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px; }
+    .badge-green { background: #E8F5E9; color: var(--verde); border: 1px solid #C8E6C9; }
+    .badge-red   { background: #FFEBEE; color: var(--rojo);  border: 1px solid #FFCDD2; }
+    .badge-gold  { background: #FFF8E1; color: #B8860B;      border: 1px solid #FFE082; }
+    .promo {
+      margin-top: 48px;
+      background: linear-gradient(135deg, var(--verde) 0%, #1A5C32 100%);
+      border-radius: 14px; padding: 32px 36px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+      position: relative; overflow: hidden;
+    }
+    .promo::before {
+      content: '';
+      position: absolute;
+      right: 24px; top: 50%;
+      transform: translateY(-50%);
+      width: 90px; height: 90px;
+      opacity: 0.1;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.2'%3E%3Crect x='2' y='9' width='20' height='12' rx='3'/%3E%3Cpath d='M16 9V7a4 4 0 0 0-8 0v2'/%3E%3Cpath d='M6 13h12'/%3E%3Cpath d='M6 17h12'/%3E%3C/svg%3E") no-repeat center/contain;
+    }
+    .promo-text h3 { font-family: 'Bebas Neue',sans-serif; font-size: 1.8rem; letter-spacing: 4px; color: #fff; margin-bottom: 6px; }
+    .promo-text p  { font-size: 0.85rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1px; }
+    .promo-price { font-family: 'Bebas Neue',sans-serif; font-size: 3.5rem; color: var(--dorado); letter-spacing: 2px; line-height: 1; }
+    footer { text-align: center; padding: 28px 20px; font-size: 0.78rem; color: #aaa; letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid #e8e0d0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .item-card, .orden-card { animation: fadeUp .4s ease both; }
+    .item-grid .item-card:nth-child(1)  { animation-delay:.05s } .item-grid .item-card:nth-child(2)  { animation-delay:.10s }
+    .item-grid .item-card:nth-child(3)  { animation-delay:.15s } .item-grid .item-card:nth-child(4)  { animation-delay:.20s }
+    .item-grid .item-card:nth-child(5)  { animation-delay:.25s } .item-grid .item-card:nth-child(6)  { animation-delay:.30s }
+    .item-grid .item-card:nth-child(7)  { animation-delay:.35s } .item-grid .item-card:nth-child(8)  { animation-delay:.40s }
+    .item-grid .item-card:nth-child(9)  { animation-delay:.45s } .item-grid .item-card:nth-child(10) { animation-delay:.50s }
+    .item-grid .item-card:nth-child(11) { animation-delay:.55s }
+    @media (max-width: 480px) { .item-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* ── SOCIAL BAR ── */
+    .social-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 44px;
+      padding: 28px 20px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.07);
+      position: relative;
+      z-index: 5;
+    }
+    .social-bar p {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      color: var(--gris);
+      margin-right: 6px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+      border: 2px solid transparent;
+      position: relative;
+      z-index: 10;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .social-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .social-btn svg  { flex-shrink: 0; }
+
+    .btn-ig {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+    }
+    .btn-fb {
+      background: #1877F2;
+      color: #fff;
+    }
+    .btn-tel {
+      background: var(--verde);
+      color: #fff;
+    }
+
+    /* ── FOOTER UPDATED ── */
+    footer {
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.78rem;
+      color: #aaa;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 1px solid #e8e0d0;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo-band">
+    <span class="logo-icon">🌮</span>
+    <span class="brand-name">Del Rica</span>
+    <span class="logo-icon">🌮</span>
+  </div>
+  <p class="brand-sub">Taquería · Menú</p>
+  <span class="tagline">No Tacos · No Life</span>
+  <br/>
+  <button class="wifi-btn" onclick="document.getElementById('wifiModal').classList.add('open')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/>
+    </svg>
+    WiFi Gratis
+  </button>
+</header>
+<main>
+  <div class="section-header sec-red"><h2>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px">
+      <path d="M3 11c0-4.97 4.03-9 9-9s9 4.03 9 9"/><path d="M3 11h18"/><path d="M6 11c0-1.5.5-3 1.5-4"/><path d="M18 11c0-1.5-.5-3-1.5-4"/><path d="M9 11v5a3 3 0 0 0 6 0v-5"/>
+    </svg>
+    Tacos
+  </h2></div>
+  <div class="item-grid">
+    <div class="item-card"><span class="item-name">Pastor</span><span class="item-price">$23</span></div>
+    <div class="item-card"><span class="item-name">Bistec</span><span class="item-price">$26</span></div>
+    <div class="item-card"><span class="item-name">Suadero</span><span class="item-price">$23</span></div>
+    <div class="item-card"><span class="item-name">Chorizo</span><span class="item-price">$22</span></div>
+    <div class="item-card"><span class="item-name">Carnaza</span><span class="item-price">$23</span></div>
+    <div class="item-card"><span class="item-name">Campechano</span><span class="item-price">$23</span></div>
+    <div class="item-card"><span class="item-name">Tripa</span><span class="item-price">$35</span></div>
+    <div class="item-card"><span class="item-name">Labio</span><span class="item-price">$27</span></div>
+    <div class="item-card"><span class="item-name">Labio en Trozo</span><span class="item-price">$35</span></div>
+    <div class="item-card"><span class="item-name">Lengua</span><span class="item-price">$35</span></div>
+    <div class="item-card"><span class="item-name">Quesadilla</span><span class="item-price">$23</span></div>
+  </div>
+
+  <div class="section-header sec-green"><h2>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px">
+      <rect x="2" y="9" width="20" height="12" rx="3"/><path d="M16 9V7a4 4 0 0 0-8 0v2"/><path d="M6 13h12"/><path d="M6 17h12"/>
+    </svg>
+    Gringas
+  </h2></div>
+  <div class="item-grid">
+    <div class="item-card green"><span class="item-name">Gringa<br/><small style="font-weight:400;font-size:.7rem;color:#aaa">Pastor · Suadero · Chorizo · Carnaza</small></span><span class="item-price">$60</span></div>
+    <div class="item-card green"><span class="item-name">Gringa Bistec</span><span class="item-price">$70</span></div>
+    <div class="item-card green"><span class="item-name">Gringa Tripa</span><span class="item-price">$90</span></div>
+    <div class="item-card green"><span class="item-name">Gringa Labio</span><span class="item-price">$75</span></div>
+    <div class="item-card green"><span class="item-name">Gringa Lengua</span><span class="item-price">$90</span></div>
+  </div>
+
+  <div class="section-header sec-red"><h2>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px">
+      <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"/><rect x="1" y="8" width="22" height="13" rx="2"/><path d="M10 12H8"/><path d="M16 12h-2"/>
+    </svg>
+    Órdenes
+  </h2></div>
+  <div class="ordenes-grid">
+
+    <!-- Pastor Mix Chica -->
+    <div class="orden-card chica">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>CHICA · 200 gr</div>
+        <div class="orden-name">Orden Chica</div>
+        <div class="orden-desc">
+          <span class="desc-chip">Pastor</span>
+          <span class="desc-chip">Suadero</span>
+          <span class="desc-chip">Chorizo</span>
+          <span class="desc-chip">Carnaza</span>
+        </div>
+        <div class="oc-bottom">
+          <div class="orden-price">$155</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            200 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pastor Mix Grande -->
+    <div class="orden-card grande">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>GRANDE · 300 gr</div>
+        <div class="orden-name">Orden Grande</div>
+        <div class="orden-desc">
+          <span class="desc-chip">Pastor</span>
+          <span class="desc-chip">Suadero</span>
+          <span class="desc-chip">Chorizo</span>
+          <span class="desc-chip">Carnaza</span>
+        </div>
+        <div class="oc-bottom">
+          <div class="orden-price">$220</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            300 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bistec Chica -->
+    <div class="orden-card chica">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>CHICA · 200 gr</div>
+        <div class="orden-name">Orden Chica de Bistec</div>
+        <div class="orden-desc"><span class="desc-chip">Bistec</span></div>
+        <div class="oc-bottom">
+          <div class="orden-price">$190</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            200 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bistec Grande -->
+    <div class="orden-card grande">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>GRANDE · 300 gr</div>
+        <div class="orden-name">Orden Grande de Bistec</div>
+        <div class="orden-desc"><span class="desc-chip">Bistec</span></div>
+        <div class="oc-bottom">
+          <div class="orden-price">$265</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            300 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Labio Chica -->
+    <div class="orden-card chica">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>CHICA · 200 gr</div>
+        <div class="orden-name">Orden Chica de Labio</div>
+        <div class="orden-desc"><span class="desc-chip">Labio</span></div>
+        <div class="oc-bottom">
+          <div class="orden-price">$195</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            200 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Labio Grande -->
+    <div class="orden-card grande">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>GRANDE · 300 gr</div>
+        <div class="orden-name">Orden Grande de Labio</div>
+        <div class="orden-desc"><span class="desc-chip">Labio</span></div>
+        <div class="oc-bottom">
+          <div class="orden-price">$265</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            300 gr
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lengua/Tripa Chica -->
+    <div class="orden-card chica">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>CHICA · 8 pzas</div>
+        <div class="orden-name">Orden Chica de Lengua / Tripa</div>
+        <div class="orden-desc">
+          <span class="desc-chip">Lengua</span>
+          <span class="desc-chip">Tripa</span>
+        </div>
+        <div class="oc-bottom">
+          <div class="orden-price">$250</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            8 pzas
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lengua/Tripa Grande -->
+    <div class="orden-card grande">
+      <div class="oc-stripe"></div>
+      <div class="oc-body">
+        <svg class="oc-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        <div class="oc-badge"><span class="oc-badge-dot"></span>GRANDE · 12 pzas</div>
+        <div class="orden-name">Orden Grande de Lengua / Tripa</div>
+        <div class="orden-desc">
+          <span class="desc-chip">Lengua</span>
+          <span class="desc-chip">Tripa</span>
+        </div>
+        <div class="oc-bottom">
+          <div class="orden-price">$380</div>
+          <div class="oc-weight">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            12 pzas
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="badges">
+    <span class="badge badge-green">⚖️ Orden Chica · 200 gr</span>
+    <span class="badge badge-green">⚖️ Orden Grande · 300 gr</span>
+    <span class="badge badge-red">🔪 Lengua · Chica 8 pzas · Grande 12 pzas</span>
+    <span class="badge badge-gold">⚠️ Combinación diferente puede generar costo extra</span>
+  </div>
+
+  <div class="promo">
+    <div class="promo-text">
+      <h3>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;opacity:.85">
+          <rect x="2" y="9" width="20" height="12" rx="3"/><path d="M16 9V7a4 4 0 0 0-8 0v2"/><path d="M6 13h12"/><path d="M6 17h12"/>
+        </svg>
+        Prueba Nuestro Delicioso Lonchecito
+      </h3>
+      <p>Pastor · Con un toque de aderezo de la casa</p>
+    </div>
+    <div class="promo-price">$65</div>
+  </div>
+
+  <!-- SOCIAL BAR -->
+  <div class="social-bar">
+    <p>Síguenos</p>
+
+    <!-- Instagram -->
+    <button class="social-btn btn-ig" onclick="window.location.href='https://www.instagram.com/elpastordelrica/'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
+      </svg>
+      Instagram
+    </button>
+
+    <!-- Facebook -->
+    <button class="social-btn btn-fb" onclick="window.location.href='https://www.facebook.com/elpastordelrica'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      </svg>
+      Facebook
+    </button>
+
+    <!-- Teléfono -->
+    <button class="social-btn btn-tel" onclick="window.location.href='tel:+523329762445'">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>
+      </svg>
+      +52 33 2976 2445
+    </button>
+  </div>
+</main>
+
+<!-- WIFI MODAL -->
+<div class="wifi-overlay" id="wifiModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="wifi-modal">
+    <button class="wifi-modal-close" onclick="document.getElementById('wifiModal').classList.remove('open')">✕</button>
+    <div class="wifi-modal-icon">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white"/>
+      </svg>
+    </div>
+    <h3>WiFi Gratis</h3>
+    <p class="wifi-sub">Conéctate y disfruta</p>
+
+    <div class="wifi-field">
+      <label>Red</label>
+      <div class="wifi-field-row">
+        <span id="ssid-text">Totalplay-2AAF</span>
+        <button class="copy-btn" onclick="copyText('ssid-text', this)" title="Copiar red">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="wifi-field">
+      <label>Contraseña</label>
+      <div class="wifi-field-row">
+        <span id="pass-text">2AAFF50t2Mkfwjp</span>
+        <button class="copy-btn" onclick="copyText('pass-text', this)" title="Copiar contraseña">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="wifi-note">Toca el ícono para copiar · Luego ve a Ajustes → WiFi</p>
+  </div>
+</div>
+
+<script>
+  function copyText(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.classList.add('copied');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
