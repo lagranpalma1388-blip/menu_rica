@@ -7,30 +7,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --rojo:     #C0392B;
-      --rojo-d:   #96281B;
-      --verde:    #1E6B3A;
-      --verde-l:  #27AE60;
-      --crema:    #FDF6E3;
-      --dorado:   #D4A017;
-      --carbon:   #1A1A1A;
-      --gris:     #4A4A4A;
+      --rojo:   #C0392B;
+      --rojo-d: #96281B;
+      --verde:  #1E6B3A;
+      --crema:  #FDF6E3;
+      --dorado: #D4A017;
+      --carbon: #1A1A1A;
+      --gris:   #4A4A4A;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background-color: var(--crema);
       color: var(--carbon);
       font-family: 'Libre Baskerville', Georgia, serif;
       min-height: 100vh;
       overflow-x: hidden;
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(192,57,43,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(30,107,58,0.07) 0%, transparent 50%);
     }
+
+    /* ── HEADER ── */
     header {
       position: relative;
       text-align: center;
-      padding: 56px 24px 40px;
+      padding: 40px 20px 48px;
       background: linear-gradient(160deg, var(--rojo-d) 0%, var(--rojo) 55%, #E74C3C 100%);
       overflow: hidden;
     }
@@ -43,30 +42,46 @@
       content: '';
       position: absolute;
       bottom: -1px; left: 0; right: 0;
-      height: 40px;
+      height: 36px;
       background: var(--crema);
       clip-path: ellipse(55% 100% at 50% 100%);
     }
-    .logo-band { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px; }
-    .logo-icon { font-size: 2.4rem; line-height: 1; }
+    .logo-band { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; position: relative; z-index: 1; }
+    .logo-icon { font-size: 2rem; line-height: 1; }
     .brand-name {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-size: clamp(2.8rem, 12vw, 5rem);
       color: #fff;
       letter-spacing: 4px;
       line-height: 1;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
     }
-    .brand-sub { font-family: 'Libre Baskerville',serif; font-size: 0.85rem; color: rgba(255,255,255,0.75); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; }
-    .tagline { display: inline-block; background: var(--dorado); color: #fff; font-family: 'Bebas Neue',sans-serif; font-size: 1.1rem; letter-spacing: 3px; padding: 6px 24px; border-radius: 2px; }
-
-    /* ── WIFI BUTTON ── */
+    .brand-sub {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .tagline {
+      display: inline-block;
+      background: var(--dorado);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      padding: 5px 20px;
+      border-radius: 2px;
+      position: relative; z-index: 1;
+    }
     .wifi-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 18px;
-      padding: 9px 22px;
+      margin-top: 16px;
+      padding: 10px 22px;
       background: rgba(255,255,255,0.15);
       border: 1.5px solid rgba(255,255,255,0.35);
       border-radius: 30px;
@@ -75,355 +90,274 @@
       font-size: 0.95rem;
       letter-spacing: 3px;
       cursor: pointer;
-      transition: background .2s, border-color .2s, transform .2s;
-      backdrop-filter: blur(4px);
+      transition: background .2s, border-color .2s;
+      position: relative; z-index: 1;
     }
-    .wifi-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.6); transform: translateY(-2px); }
-    .wifi-btn svg { flex-shrink: 0; }
+    .wifi-btn:active { background: rgba(255,255,255,0.28); }
 
     /* ── WIFI MODAL ── */
     .wifi-overlay {
       display: none;
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(3px);
       z-index: 999;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
-    .wifi-overlay.open { display: flex; animation: fadeIn .2s ease; }
-    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
-
+    .wifi-overlay.open { display: flex; }
     .wifi-modal {
       background: #fff;
       border-radius: 20px;
-      padding: 36px 32px 28px;
-      max-width: 360px;
-      width: 90%;
+      padding: 32px 24px 24px;
+      max-width: 340px;
+      width: 100%;
       text-align: center;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
-      animation: slideUp .25s ease;
       position: relative;
     }
-    @keyframes slideUp { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
-
     .wifi-modal-close {
       position: absolute; top: 14px; right: 16px;
       background: none; border: none; cursor: pointer;
       color: #bbb; font-size: 1.4rem; line-height: 1;
-      transition: color .15s;
     }
-    .wifi-modal-close:hover { color: var(--rojo); }
-
     .wifi-modal-icon {
-      width: 64px; height: 64px;
+      width: 60px; height: 60px;
       background: linear-gradient(135deg, var(--verde), #27AE60);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 6px 20px rgba(30,107,58,0.3);
+      margin: 0 auto 14px;
     }
     .wifi-modal h3 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       letter-spacing: 4px;
       color: var(--carbon);
       margin-bottom: 4px;
     }
-    .wifi-modal .wifi-sub {
-      font-size: 0.75rem;
-      color: #aaa;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
+    .wifi-sub { font-size: 0.72rem; color: #aaa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
     .wifi-field {
       background: #F8F5EE;
       border-radius: 10px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       margin-bottom: 10px;
       text-align: left;
-      position: relative;
     }
     .wifi-field label {
       display: block;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       color: #aaa;
       margin-bottom: 4px;
-      font-family: 'Libre Baskerville', serif;
     }
-    .wifi-field-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
+    .wifi-field-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .wifi-field span {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       letter-spacing: 2px;
       color: var(--carbon);
+      word-break: break-all;
     }
     .copy-btn {
       background: none; border: none; cursor: pointer;
-      color: var(--verde); padding: 4px;
-      border-radius: 6px;
-      transition: background .15s, color .15s;
+      color: var(--verde); padding: 6px;
+      border-radius: 6px; flex-shrink: 0;
+      min-width: 32px; min-height: 32px;
+    }
+    .copy-btn.copied { color: var(--dorado); }
+    .wifi-note { font-size: 0.7rem; color: #bbb; margin-top: 14px; line-height: 1.6; }
+
+    /* ── MAIN ── */
+    main { max-width: 960px; margin: 0 auto; padding: 32px 16px 60px; }
+
+    /* ── SECTION HEADERS ── */
+    .section-header { display: flex; align-items: center; gap: 12px; margin: 36px 0 16px; }
+    .section-header::before, .section-header::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.2; }
+    .section-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 4px;
+      white-space: nowrap;
+      padding: 4px 14px;
+      border-radius: 2px;
+    }
+    .sec-red   { color: var(--rojo);  } .sec-red  h2  { color: #fff; background: var(--rojo); }
+    .sec-green { color: var(--verde); } .sec-green h2 { color: #fff; background: var(--verde); }
+    .sec-gold  { color: var(--dorado);} .sec-gold h2  { color: #fff; background: var(--dorado); }
+
+    /* ── ITEM GRID ── */
+    .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (min-width: 600px) { .item-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
+
+    .item-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .item-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--gris);
+      line-height: 1.3;
+    }
+    .item-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      color: var(--rojo);
       flex-shrink: 0;
     }
-    .copy-btn:hover { background: #E8F5E9; }
-    .copy-btn.copied { color: var(--dorado); }
-
-    .wifi-note {
-      font-size: 0.72rem;
-      color: #bbb;
-      margin-top: 16px;
-      line-height: 1.6;
-    }
-    main { max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
-    .section-header { display: flex; align-items: center; gap: 14px; margin: 44px 0 20px; }
-    .section-header::before, .section-header::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.2; }
-    .section-header h2 { font-family: 'Bebas Neue',sans-serif; font-size: 1.6rem; letter-spacing: 5px; white-space: nowrap; padding: 4px 16px; border-radius: 2px; }
-    .sec-red  { color: var(--rojo);  } .sec-red  h2 { color: #fff; background: var(--rojo); }
-    .sec-green{ color: var(--verde); } .sec-green h2{ color: #fff; background: var(--verde); }
-    .sec-gold { color: var(--dorado);} .sec-gold h2 { color: #fff; background: var(--dorado); }
-    .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-    .item-card {
-      background: #fff; border: 1px solid rgba(0,0,0,0.07); border-radius: 10px;
-      padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;
-      gap: 8px; transition: transform .18s ease, box-shadow .18s ease; cursor: default;
-    }
-    .item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.09); }
-    .item-name { font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gris); }
-    .item-price { font-family: 'Bebas Neue',sans-serif; font-size: 1.35rem; letter-spacing: 1px; white-space: nowrap; color: var(--rojo); }
     .item-card.green .item-price { color: var(--verde); }
+
     /* ── ORDENES ── */
-    .ordenes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 560px) { .ordenes-grid { grid-template-columns: 1fr; } }
+    .ordenes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 400px) { .ordenes-grid { grid-template-columns: 1fr; } }
 
     .orden-card {
       background: #fff;
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      transition: transform .2s ease, box-shadow .2s ease;
-      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
     }
-    .orden-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.13);
-    }
-
-    /* colored top stripe */
-    .orden-card .oc-stripe {
-      height: 6px;
-      width: 100%;
-    }
-    .orden-card.chica .oc-stripe  { background: linear-gradient(90deg, var(--rojo), #E74C3C); }
+    .orden-card .oc-stripe { height: 5px; width: 100%; }
+    .orden-card.chica  .oc-stripe { background: linear-gradient(90deg, var(--rojo), #E74C3C); }
     .orden-card.grande .oc-stripe { background: linear-gradient(90deg, var(--verde), #27AE60); }
+    .orden-card .oc-body { padding: 14px 16px 16px; position: relative; }
+    .orden-card .oc-bg-icon { position: absolute; right: 10px; top: 10px; opacity: 0.06; width: 48px; height: 48px; }
 
-    .orden-card .oc-body {
-      padding: 18px 20px 20px;
-      position: relative;
-    }
-
-    /* decorative bg icon */
-    .orden-card .oc-bg-icon {
-      position: absolute;
-      right: 14px;
-      top: 14px;
-      opacity: 0.06;
-      width: 56px;
-      height: 56px;
-    }
-
-    /* size badge */
     .oc-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      padding: 3px 10px;
-      border-radius: 30px;
-      margin-bottom: 10px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 0.65rem; letter-spacing: 2px;
+      padding: 3px 9px; border-radius: 30px; margin-bottom: 8px;
     }
     .orden-card.chica  .oc-badge { background: #FFEBEE; color: var(--rojo); }
     .orden-card.grande .oc-badge { background: #E8F5E9; color: var(--verde); }
-    .oc-badge-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-    }
+    .oc-badge-dot { width: 5px; height: 5px; border-radius: 50%; }
     .orden-card.chica  .oc-badge-dot { background: var(--rojo); }
     .orden-card.grande .oc-badge-dot { background: var(--verde); }
 
-    /* name */
     .orden-name {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.25rem;
-      letter-spacing: 2.5px;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
       color: var(--carbon);
       margin-bottom: 5px;
       line-height: 1.2;
     }
-
-    /* desc chips */
-    .orden-desc {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 14px;
-      min-height: 22px;
-    }
+    .orden-desc { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 12px; min-height: 20px; }
     .desc-chip {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding: 2px 8px;
-      background: #F5F5F5;
-      border-radius: 4px;
-      color: #888;
-      font-family: 'Libre Baskerville', serif;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.4px;
+      padding: 2px 7px; background: #F5F5F5; border-radius: 4px; color: #888;
     }
-
-    /* bottom row */
-    .oc-bottom {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-    }
+    .oc-bottom { display: flex; align-items: flex-end; justify-content: space-between; }
     .orden-price {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 900;
       line-height: 1;
     }
     .orden-card.chica  .orden-price { color: var(--rojo); }
     .orden-card.grande .orden-price { color: var(--verde); }
+    .oc-weight { display: flex; align-items: center; gap: 4px; font-size: 0.68rem; font-weight: 700; color: #aaa; padding-bottom: 3px; }
 
-    /* weight pill */
-    .oc-weight {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: #aaa;
-      padding-bottom: 4px;
-    }
-    .oc-weight svg { opacity: 0.5; }
-    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
-    .badge { padding: 10px 20px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px; }
+    /* ── BADGES ── */
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+    .badge { padding: 9px 16px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.4px; line-height: 1.4; }
     .badge-green { background: #E8F5E9; color: var(--verde); border: 1px solid #C8E6C9; }
     .badge-red   { background: #FFEBEE; color: var(--rojo);  border: 1px solid #FFCDD2; }
     .badge-gold  { background: #FFF8E1; color: #B8860B;      border: 1px solid #FFE082; }
+
+    /* ── PROMO ── */
     .promo {
-      margin-top: 48px;
+      margin-top: 36px;
       background: linear-gradient(135deg, var(--verde) 0%, #1A5C32 100%);
-      border-radius: 14px; padding: 32px 36px;
-      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
-      position: relative; overflow: hidden;
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-    .promo::before {
-      content: '';
-      position: absolute;
-      right: 24px; top: 50%;
-      transform: translateY(-50%);
-      width: 90px; height: 90px;
-      opacity: 0.1;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.2'%3E%3Crect x='2' y='9' width='20' height='12' rx='3'/%3E%3Cpath d='M16 9V7a4 4 0 0 0-8 0v2'/%3E%3Cpath d='M6 13h12'/%3E%3Cpath d='M6 17h12'/%3E%3C/svg%3E") no-repeat center/contain;
+    .promo-text h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.2;
     }
-    .promo-text h3 { font-family: 'Bebas Neue',sans-serif; font-size: 1.8rem; letter-spacing: 4px; color: #fff; margin-bottom: 6px; }
-    .promo-text p  { font-size: 0.85rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1px; }
-    .promo-price { font-family: 'Bebas Neue',sans-serif; font-size: 3.5rem; color: var(--dorado); letter-spacing: 2px; line-height: 1; }
-    footer { text-align: center; padding: 28px 20px; font-size: 0.78rem; color: #aaa; letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid #e8e0d0; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .item-card, .orden-card { animation: fadeUp .4s ease both; }
-    .item-grid .item-card:nth-child(1)  { animation-delay:.05s } .item-grid .item-card:nth-child(2)  { animation-delay:.10s }
-    .item-grid .item-card:nth-child(3)  { animation-delay:.15s } .item-grid .item-card:nth-child(4)  { animation-delay:.20s }
-    .item-grid .item-card:nth-child(5)  { animation-delay:.25s } .item-grid .item-card:nth-child(6)  { animation-delay:.30s }
-    .item-grid .item-card:nth-child(7)  { animation-delay:.35s } .item-grid .item-card:nth-child(8)  { animation-delay:.40s }
-    .item-grid .item-card:nth-child(9)  { animation-delay:.45s } .item-grid .item-card:nth-child(10) { animation-delay:.50s }
-    .item-grid .item-card:nth-child(11) { animation-delay:.55s }
-    @media (max-width: 480px) { .item-grid { grid-template-columns: 1fr 1fr; } }
+    .promo-text p { font-size: 0.8rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 1px; }
+    .promo-price { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--dorado); letter-spacing: 2px; line-height: 1; }
 
     /* ── SOCIAL BAR ── */
     .social-bar {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 44px;
-      padding: 24px 16px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      margin-top: 36px;
+      padding: 20px 16px;
       background: #fff;
       border-radius: 14px;
       border: 1px solid rgba(0,0,0,0.07);
-      position: relative;
-      z-index: 5;
     }
     .social-bar p {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1rem;
       letter-spacing: 3px;
       color: var(--gris);
-      width: 100%;
       text-align: center;
-      margin: 0 0 4px 0;
+      margin-bottom: 2px;
     }
     .social-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      text-decoration: none;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 10px;
       font-family: 'Libre Baskerville', serif;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
-      border: 2px solid transparent;
-      position: relative;
-      z-index: 10;
-      pointer-events: auto;
+      border: none;
       cursor: pointer;
-      white-space: nowrap;
-      flex: 1 1 auto;
-      min-width: 0;
+      width: 100%;
+      min-height: 48px;
     }
-    .social-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-    .social-btn svg  { flex-shrink: 0; }
+    .btn-ig { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #fff; }
+    .btn-fb { background: #1877F2; color: #fff; }
+    .btn-tel { background: var(--verde); color: #fff; }
 
-    .btn-ig {
-      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-      color: #fff;
-    }
-    .btn-fb {
-      background: #1877F2;
-      color: #fff;
-    }
-    .btn-tel {
-      background: var(--verde);
-      color: #fff;
+    @media (min-width: 480px) {
+      .social-bar { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; }
+      .social-bar p { width: 100%; }
+      .social-btn { width: auto; flex: 1 1 140px; }
     }
 
-    /* ── FOOTER UPDATED ── */
+    /* ── FOOTER ── */
     footer {
       text-align: center;
-      padding: 28px 20px;
-      font-size: 0.78rem;
+      padding: 24px 20px;
+      font-size: 0.75rem;
       color: #aaa;
       letter-spacing: 2px;
       text-transform: uppercase;
       border-top: 1px solid #e8e0d0;
-      margin-top: 20px;
+      margin-top: 16px;
     }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .item-card, .orden-card { animation: fadeUp .35s ease both; }
   </style>
 </head>
 <body>
